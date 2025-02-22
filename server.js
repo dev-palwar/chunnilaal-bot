@@ -33,7 +33,22 @@ if (bot) {
   console.log("Bot is running...");
 }
 
-const serviceAccount = require("./telegram-bot-chunnilaal-v2-firebase-adminsdk-fbsvc-7eb66918bb.json");
+const serviceAccount = {
+  type: "service_account",
+  project_id: "telegram-bot-chunnilaal-v2",
+  private_key_id: "41f8b50dd1199ef3e2759e98a400958a4e3c2250",
+  private_key:
+    "-----BEGIN PRIVATE KEY-----\nMIIEugIBADANBgkqhkiG9w0BAQEFAASCBKQwggSgAgEAAoIBAQDAa54kmGbQHY1v\n7LdufCiCA2rNsN6fmfhJ5aD9OlMfLk0OtPzyT+zfgpTYarwNo106sP/S/7pFGapQ\n/evrvlhaKPs2SYZKouLJ4jabZs0iR9Yls3MrAL+7JuMUtnub+a13G4w3QbfzUKyO\nQsJ8YGsFnQ/CPrq0l4HzItqsUfcKWnkmx7Zi56t6p3H5TBv+UFfteBqlO43AYUYH\nVP1JyZOLCbWnqag7LTAb7rmM1HLjgZzoJp9d8Je3mKboCGo0rOciBb2TTEY5nLET\nPTPGZx6GKMnqphQydGIAMKiA5ltI6Kn+d0gnNiMRCBTpuTx2ZO29T8Pt7Xm4hUZe\naIGbjQ1RAgMBAAECgf9EResBZmcUcL0+eT9HHxvrBaC1BYyivymEZCA7DqFvmX4T\nOc8w1YBhIx6tAIdjpL3vlTMwKoxs+C5LjnenAw1WRYmHjuRB7ImLbY2dQLHdop+D\nwP2cGdKYal59euy2QGDMDM+Iy535NyatU1gDyYeE9mAhC8uInY6o4N+17184Ie76\nQalZSkN1lYEgPJ8lXtnBvdw0CVOnStBfc7VqAM08Kt9Fpi1AbVJimqs37KmPY4/j\nHQsatYZTYC3acbfM4oVYoDw5WOdAa++yySkkFtRUUUKBZUhA4W9oh8FDoSi0rCjr\nCfXvsYBl6w1UpSDhHSQd1PvSrSBlMPq7lpTb1YcCgYEA4zOmy9TNMLTQvJ8awinZ\n+ALhkTatQd50qxwk1WzxO8evrzuppRxw0uu6lBgTUmsg1DTYt9P9O2dHlRzywZOr\nPwNhiAL+u5LP0tSicTWubsVyS4O0YrZJJ38X5jJrds1qEhL+qvFF3Ernjn1v5T7v\nX/vSXEZ4HHkCxhSUxCO9yc8CgYEA2M9dHmXX7o/Hx4y2hlB95l5ZnNiJC3b2F2Zy\nKD17MuxN+tlizHEdY9Lv4lDK23bTDXEMVrg2KuUHx2avhw8aHdbUXIEKAxeOze+I\n1oAL6Untq4ZyhsonaKmXH+QtmrrpmYsWUD7mHh6pWvoOvYxELNAgljCjEeP0/1P4\nbrQsHt8CgYBLngFBjc3NDCD85idNwAgflzXj0sLPTW6fFHrd3ahcMRWzyLOplFGo\noXQznd+wap8+gWgvpop9nt4gLsZMzw0Lp+BqGDUX0MECdmqqKyenDmf/4hHDWM/4\nKUCXCOjjXXKUGWZRFoQd0YBH2E/JiKy60WEt/PY048Gck3T/4rVj2QKBgCe4vh++\nmvQbJYf60MoE3zwglxx0U49lKSsaWtnigbrPrm3B/CbmpnLOh6KYGMJin8I7rv4I\nW+w579Xpi0kcTDWhUWDtR09PtpsmQpTB+uyv3bpqNHtbeCLlx0lRfcV2byvxXpIv\nI+vqxC5l1+OEWk03iHDb0lSJxi4tTTvDCL5TAoGAAjCIf1hKcuVu6Nw0N5TjlDl5\nxgQ/AMk4acdOkx3Xx8AzILbgbV4t/AQMPT4bA68WxSjMOinmiQ/S0g3pLXUaSy5t\n6un5hEATq059QUASID9XgRr7YEdIKJEebwsiiQ94oNeOXf0SjwXUNmTUCWGez9FT\niloB5wFGIMbpXF0XiK4=\n-----END PRIVATE KEY-----\n",
+  client_email:
+    "firebase-adminsdk-fbsvc@telegram-bot-chunnilaal-v2.iam.gserviceaccount.com",
+  client_id: "104231239139709751700",
+  auth_uri: "https://accounts.google.com/o/oauth2/auth",
+  token_uri: "https://oauth2.googleapis.com/token",
+  auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+  client_x509_cert_url:
+    "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40telegram-bot-chunnilaal-v2.iam.gserviceaccount.com",
+  universe_domain: "googleapis.com",
+};
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
