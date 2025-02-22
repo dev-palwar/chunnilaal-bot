@@ -1,0 +1,339 @@
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: #17212b;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: white;
+}
+
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #0f0f0f;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    padding: 1rem;
+}
+
+.button {
+    background-color: #2AABEE;
+    color: white;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #229ED9;
+}
+
+.logo-section {
+    text-align: center;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-icons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.logo-icon {
+    background-color: #2AABEE;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.logo-icon:first-child {
+    transform: rotate(-6deg);
+}
+
+.logo-icon:last-child {
+    transform: rotate(6deg);
+}
+
+.channel-name {
+    font-size: 36px;
+    font-weight: bold;
+    margin: 0;
+    margin-bottom: 8px;
+}
+
+.channel-subtitle {
+    font-size: 24px;
+    margin: 0;
+    font-weight: normal;
+}
+
+.profile-section {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.profile-pic {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 4px solid #2AABEE;
+    overflow: hidden;
+    /* object-fit: cover; */
+}
+
+.widget-area {
+    /* Space for dynamic widget */
+    min-height: 200px;
+    /* background-color: rgba(255, 255, 255, 0.05); */
+    border-radius: 12px;
+    margin-top: 20px;
+    padding: 2rem;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-wrap: balance;
+}
+
+.telegram-post {
+    /* border: 2px solid; */
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    margin-bottom: 1rem;
+
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    /* border: 1px solid #e0e0e0; */
+}
+
+.telegram-post,
+img {
+    height: 100%;
+    width: 100%;
+    border-radius: 15px;
+}
+
+.telegram-post h2 {
+    font-size: 1.25rem;
+    margin: 0;
+    font-weight: bold;
+}
+
+.telegram-post p {
+    font-size: 1rem;
+    margin: 0.5rem 0 0;
+    margin-bottom: 1rem;
+}
+
+a {
+    font-size: 12px;
+}
+
+
+/* ////////////////////////// */
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0f0f0f;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-image: url('https://i.ibb.co/QjTYQCbk/image.png');
+}
+
+.channel-preview {
+    width: 100%;
+    max-width: 360px;
+    padding: 20px;
+    text-align: center;
+    color: #fff;
+}
+
+.profile-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin-bottom: 16px;
+}
+
+.channel-name {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.subscriber-count {
+    color: #8e8e8e;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.status-message {
+    color: #fff;
+    margin: 8px 0;
+    font-size: 16px;
+}
+
+.telegram-button {
+    display: inline-block;
+    background-color: #2AABEE;
+    color: white;
+    /* padding: 12px 24px; */
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    margin: 16px 0;
+    transition: background-color 0.2s;
+}
+
+.telegram-button:hover {
+    background-color: #229ED9;
+}
+
+.preview-text {
+    color: #8e8e8e;
+    font-size: 14px;
+}
+
+/* #pop-up {
+    border: 2px solid;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+} */
+
+#pop-up {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    color: black;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+#pop-up button {
+    margin: 10px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#allow-button {
+    background-color: #08c;
+    color: white;
+    border: none;
+}
+
+#dont-allow-button {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+}
+
+.telegram-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0088cc;
+    color: white;
+    font-size: 16px;
+    padding: 12px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.telegram-button:hover {
+    background-color: #007bb5;
+}
+
+.telegram-button svg {
+    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+    fill: white;
+}
+
+.whatsapp-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #25d366;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 0px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.whatsapp-button:hover {
+    background-color: #1ebe5d;
+}
+
+.whatsapp-button svg {
+    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+    fill: white;
+}
+
+/* Disclaimer Styling */
+.disclaimer {
+    margin: 20px auto;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+    max-width: 600px;
+    font-size: 14px;
+    color: #555;
+    background: #0f0f0f;
+    color: white;
+}
+
+.disclaimer a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.disclaimer a:hover {
+    text-decoration: underline;
+}
