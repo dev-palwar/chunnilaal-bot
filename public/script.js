@@ -1,4 +1,8 @@
-console.log(navigator.userAgent);
+
+  let channelUsername = null;
+  document.getElementById("disclaimer").innerHTML = navigator.userAgent;
+
+  console.log(navigator.userAgent);
 
   const firebaseConfig = {
     apiKey: "AIzaSyDSd5_bFm1kdCp0pCXdYcesoQMWaHFdnbY",
@@ -164,13 +168,13 @@ console.log(navigator.userAgent);
   }
 
   // Function to create a Telegram widget for a given post ID
-  function createTelegramWidget(postId) {
+  function createTelegramWidget(postId, channelUsername) {
     const widgetContainer = document.createElement("div");
     widgetContainer.className = "telegram-widget";
     const script = document.createElement("script");
     script.async = true;
     script.src = "https://telegram.org/js/telegram-widget.js?22";
-    script.setAttribute("data-telegram-post", `thisonejsbot/${postId}`);
+    script.setAttribute("data-telegram-post", `${channelUsername}/${postId}`);
     script.setAttribute("data-width", "100%");
     script.setAttribute("data-color", "13B4C6");
     script.setAttribute("data-dark", "1");
@@ -191,11 +195,11 @@ console.log(navigator.userAgent);
   }
 
   // Function to render posts
-  function renderPosts(posts) {
+  function renderPosts(posts, channelUsername) {
     const widgetArea = document.querySelector(".telegram-container");
     widgetArea.innerHTML = ""; // Clear the existing widgets
     posts.forEach((postId) => {
-      const widget = createTelegramWidget(postId);
+      const widget = createTelegramWidget(postId, channelUsername);
       widgetArea.appendChild(widget);
     });
   }
@@ -211,13 +215,18 @@ console.log(navigator.userAgent);
         document.getElementById("channelImageOnClient").src =
           data.channelImageLink;
         document.getElementById("heading").innerHTML = data.channelName;
+
+        channelUsername = data.channelUsername;
+
+        console.log(data.channelUsername);
+
         // Load existing posts from localStorage
         const posts = loadPostsFromLocalStorage();
         // Add the new post ID if it doesn't already exist
         if (!posts.includes(data.postId)) {
           posts.unshift(data.postId); // Add to the beginning of the array
           savePostsToLocalStorage(posts); // Save updated posts to localStorage
-          renderPosts(posts); // Re-render the posts
+          renderPosts(posts, channelUsername); // Re-render the posts
         }
       }
     } catch (error) {
