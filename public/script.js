@@ -1,5 +1,6 @@
 if (navigator.userAgent.includes("Android")) {
-  alert("please open the link in the browser");
+  alert("Please open the website in the browser. \n Link copied to clipboard");
+  navigator.clipboard.writeText(window.location.href);
 } else {
   document.getElementById("disclaimer").innerHTML = navigator.userAgent;
 
