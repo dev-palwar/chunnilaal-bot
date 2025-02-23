@@ -3,18 +3,12 @@ const TelegramBot = require("node-telegram-bot-api");
 const path = require("path");
 const { config } = require("dotenv");
 const admin = require("firebase-admin");
+const { constructNotificationObj } = require("./utils");
 
 config();
-
-console.log(process.env.TYPE);
-
-const app = express();
 const PORT = 9090;
 
-const notificationBodyForChangesInDatabase = {
-  title: "New update in the channel",
-  body: "idk just check it",
-};
+const app = express();
 
 // Middleware
 app.use(express.json());
@@ -22,7 +16,7 @@ app.use(express.json());
 // Serves static files
 app.use(express.static(path.join(__dirname, "public")));
 
-// Stores the latest post ID
+// Variables to store basic data of a channel
 let latestPostId = null;
 let channelImageLink = null;
 let channelName = null;
@@ -32,30 +26,33 @@ let channelUsername = null;
 const Bot_Token = process.env.BOT_TOKEN;
 const bot = new TelegramBot(Bot_Token, { polling: true });
 
-if (bot) {
-  console.log("Bot is running...");
-}
+if (bot) console.log("Bot is running...");
 
 const serviceAccount = {
   projectId: process.env.FIREBASE_PROJECT_ID,
   clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-  privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"), // Fix newlines
+  privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"), // Fixes newlines
 };
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
-// Get Firestore instance
+// Gets Firestore instance
 const db = admin.firestore();
 
-// Listen for changes in a specific document
+// Listens for changes in a specific document
 const docRef = db.collection("chunnilaal bot").doc("1");
 
 const unsubscribe = docRef.onSnapshot(
   (doc) => {
     if (doc.exists) {
-      broadcastNotification(notificationBodyForChangesInDatabase);
+      broadcastNotification(
+        constructNotificationObj(
+          "New update in the channel " + channelName,
+          "Click to see"
+        )
+      );
     } else {
       console.log("Document does not exist");
     }
@@ -65,72 +62,11 @@ const unsubscribe = docRef.onSnapshot(
   }
 );
 
-// Function to retrieve FCM tokens from Firestore
-async function getFcmTokens() {
-  try {
-    const tokensRef = db.collection("chunnilaal bot").doc("fcmToken");
-    const doc = await tokensRef.get();
-
-    if (doc.exists) {
-      return doc.data().tokens || [];
-    } else {
-      console.log("No tokens found in Firestore");
-      return [];
-    }
-  } catch (error) {
-    console.error("Error fetching tokens from Firestore:", error);
-    return [];
-  }
-}
-
-// Function to broadcast notifications
-async function broadcastNotification({ title, body }) {
-  try {
-    const fcmTokens = await getFcmTokens(); // Retrieve tokens from Firestore
-
-    if (fcmTokens.length === 0) {
-      console.log("No FCM tokens available");
-      return;
-    }
-
-    // Create multicast message
-    const message = {
-      notification: { title, body },
-      tokens: fcmTokens, // Array of tokens
-    };
-
-    const response = await admin.messaging().sendEachForMulticast(message);
-
-    console.log("Success count:", response.successCount);
-    console.log("Failure count:", response.failureCount);
-
-    // Handle failed tokens
-    if (response.failureCount > 0) {
-      const failedTokens = [];
-      response.responses.forEach((resp, idx) => {
-        if (!resp.success) {
-          failedTokens.push(fcmTokens[idx]);
-        }
-      });
-      console.log("Failed tokens:", failedTokens);
-
-      // Remove failed tokens from Firestore
-      const tokensRef = db.collection("chunnilaal bot").doc("fcmToken");
-      const updatedTokens = fcmTokens.filter(
-        (token) => !failedTokens.includes(token)
-      );
-      await tokensRef.update({ tokens: updatedTokens });
-    }
-  } catch (error) {
-    console.error("Broadcast error:", error);
-  }
-}
-
 // Listens for new posts in the channel
 bot.on("channel_post", async (msg) => {
   const postId = msg.message_id;
   const chatId = msg.chat.id;
-  const text = msg.text || "No text available";
+  const text = msg.text || "Click to see";
 
   console.log(`New post in channel ${chatId}:`);
   console.log(`Post ID: ${postId}`);
@@ -138,27 +74,31 @@ bot.on("channel_post", async (msg) => {
 
   // Updates the latest post ID
   latestPostId = postId;
+
+  // Updates the channel username
   channelUsername = msg.sender_chat.username;
 
   try {
-    // Fetch channel details
+    // Fetchs channel details
     const chatInfo = await bot.getChat(chatId);
 
-    broadcastNotification({
-      title: "New post in channel" + chatInfo.title,
-      body: text,
-    });
+    broadcastNotification(
+      constructNotificationObj(
+        "New post in the channel " + chatInfo.title,
+        text
+      )
+    );
 
-    // Extract channel name
+    // Extracts channel name
     channelName = chatInfo.title;
     console.log(`Channel Name: ${channelName}`);
 
-    // Extract channel profile picture (if available)
+    // Extracts channel profile picture (if available)
     if (chatInfo.photo) {
       const photo = chatInfo.photo;
       const largestPhoto = photo.big_file_id;
 
-      // Get the file URL using the file ID
+      // Gets the file URL using the file ID
       const fileLink = await bot.getFileLink(largestPhoto);
       channelImageLink = fileLink;
       console.log(`Channel Profile Picture: ${fileLink}`);
@@ -182,14 +122,14 @@ app.post("/send-fcm-token", async (req, res) => {
   console.log("Client sent the FCM token: " + FCM_TOKEN);
 
   try {
-    // Save the token in Firestore
+    // Saves the token in Firestore
     const tokensRef = db.collection("chunnilaal bot").doc("fcmToken");
 
-    // Get the existing tokens (if any)
+    // Gets the existing tokens (if any)
     const doc = await tokensRef.get();
 
     if (doc.exists) {
-      // If the document exists, update the tokens array
+      // If the document exists, updates the tokens array
       const existingTokens = doc.data().tokens || [];
       if (!existingTokens.includes(FCM_TOKEN)) {
         existingTokens.push(FCM_TOKEN);
@@ -199,7 +139,7 @@ app.post("/send-fcm-token", async (req, res) => {
         console.log("Token already exists in Firestore");
       }
     } else {
-      // If the document doesn't exist, create it with the new token
+      // If the document doesn't exist, creates it with the new token
       await tokensRef.set({ tokens: [FCM_TOKEN] });
       console.log("New Firestore document created with the token");
     }
@@ -229,3 +169,62 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+async function broadcastNotification({ title, body }) {
+  try {
+    const fcmTokens = await getFcmTokens(); // Retrieves tokens from Firestore
+
+    if (fcmTokens.length === 0) {
+      console.log("No FCM tokens available");
+      return;
+    }
+
+    // Creates multicast message
+    const message = {
+      notification: { title, body },
+      tokens: fcmTokens, // Array of tokens
+    };
+
+    const response = await admin.messaging().sendEachForMulticast(message);
+
+    console.log("Success count:", response.successCount);
+    console.log("Failure count:", response.failureCount);
+
+    // Handles failed tokens
+    if (response.failureCount > 0) {
+      const failedTokens = [];
+      response.responses.forEach((resp, idx) => {
+        if (!resp.success) {
+          failedTokens.push(fcmTokens[idx]);
+        }
+      });
+      console.log("Failed tokens:", failedTokens);
+
+      // Removes failed tokens from Firestore
+      const tokensRef = db.collection("chunnilaal bot").doc("fcmToken");
+      const updatedTokens = fcmTokens.filter(
+        (token) => !failedTokens.includes(token)
+      );
+      await tokensRef.update({ tokens: updatedTokens });
+    }
+  } catch (error) {
+    console.error("Broadcast error:", error);
+  }
+}
+
+async function getFcmTokens() {
+  try {
+    const tokensRef = db.collection("chunnilaal bot").doc("fcmToken");
+    const doc = await tokensRef.get();
+
+    if (doc.exists) {
+      return doc.data().tokens || [];
+    } else {
+      console.log("No tokens found in Firestore");
+      return [];
+    }
+  } catch (error) {
+    console.error("Error fetching tokens from Firestore:", error);
+    return [];
+  }
+}
