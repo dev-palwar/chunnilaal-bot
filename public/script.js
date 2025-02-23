@@ -1,7 +1,3 @@
-document.getElementById("disclaimer").innerHTML = navigator.userAgent;
-
-console.log(navigator.userAgent);
-
 const firebaseConfig = {
   apiKey: "AIzaSyDSd5_bFm1kdCp0pCXdYcesoQMWaHFdnbY",
 
@@ -41,7 +37,7 @@ if (!firebase.apps.length) {
 // Firebase messaging instance
 const messaging = firebase.messaging();
 
-// Initialize Firestore
+// Initializes Firestore
 const db = firebase.firestore();
 
 const setupFirestoreListener = () => {
@@ -78,13 +74,13 @@ function loadDynamicButtons(firebase_data) {
   disclaimer.innerHTML = firebase_data.disclaimer;
 }
 
-// Add this function to handle the popup visibility
+// function to handle the popup visibility
 function showNotificationPopup() {
   const popup = document.getElementById("pop-up");
   popup.style.display = "block";
 }
 
-// Hide popup function
+// Hides popup function
 function hideNotificationPopup() {
   const popup = document.getElementById("pop-up");
   popup.style.display = "none";
@@ -107,21 +103,19 @@ async function getAndSendToken() {
 
 // Check notification permission and show popup if needed
 async function checkAndRequestPermission() {
-  // Check current permission state
+  // Checks current permission state
   const currentPermission = Notification.permission;
 
   if (currentPermission === "granted") {
     // Permission already granted, proceed to get token
     await getAndSendToken();
   } else if (currentPermission === "denied") {
-    // User has already denied - show popup to explain importance
-    // showNotificationPopup();
+    // User has already denied - shows popup to explain importance
     setTimeout(() => {
       showNotificationPopup();
     }, 7000);
   } else {
-    // Permission state is "default" (not decided yet) - show popup
-    // showNotificationPopup();
+    // Permission state is "default" (not decided yet) - shows popup
     setTimeout(() => {
       showNotificationPopup();
     }, 7000);
@@ -165,8 +159,6 @@ async function sendFCNToBackend(token) {
 
 // Function to create a Telegram widget for a given post ID
 function createTelegramWidget(postId, channelUsername) {
-  console.log(channelUsername);
-
   const widgetContainer = document.createElement("div");
   widgetContainer.className = "telegram-widget";
   const script = document.createElement("script");
@@ -194,10 +186,8 @@ function loadPostsFromLocalStorage() {
 
 // Function to render posts
 function renderPosts(posts, channelUsername) {
-  console.log(channelUsername);
-
   const widgetArea = document.querySelector(".telegram-container");
-  widgetArea.innerHTML = ""; // Clear the existing widgets
+  widgetArea.innerHTML = ""; // Clears the existing widgets
   posts.forEach((postId) => {
     const widget = createTelegramWidget(postId, channelUsername);
     widgetArea.appendChild(widget);
@@ -206,28 +196,24 @@ function renderPosts(posts, channelUsername) {
 
 // Function to fetch the latest post ID from the server
 async function fetchLatestPostId() {
-  console.log("Fetching latest post");
+  console.log("Fetching latest post...");
 
   try {
     const response = await fetch("/latest-post-id");
     const data = await response.json();
-
-    console.log(data);
 
     if (data.postId) {
       document.getElementById("channelImageOnClient").src =
         data.channelImageLink;
       document.getElementById("heading").innerHTML = data.channelName;
 
-      console.log(data.channelUsername);
-
-      // Load existing posts from localStorage
+      // Loads existing posts from localStorage
       const posts = loadPostsFromLocalStorage();
-      // Add the new post ID if it doesn't already exist
+      // Adds the new post ID if it doesn't already exist
       if (!posts.includes(data.postId)) {
-        posts.unshift(data.postId); // Add to the beginning of the array
-        savePostsToLocalStorage(posts); // Save updated posts to localStorage
-        renderPosts(posts, data.channelUsername); // Re-render the posts
+        posts.unshift(data.postId); // Adds to the beginning of the array
+        savePostsToLocalStorage(posts); // Saves updated posts to localStorage
+        renderPosts(posts, data.channelUsername); // Re-renders the posts
       }
     }
   } catch (error) {
@@ -237,7 +223,7 @@ async function fetchLatestPostId() {
 
 // Loads posts from localStorage when the page loads
 document.addEventListener("DOMContentLoaded", () => {
-  // Initial setup - hide popup by default
+  // Initial setup - hides popup by default
   const popup = document.getElementById("pop-up");
   popup.style.display = "none";
 
@@ -248,13 +234,12 @@ document.addEventListener("DOMContentLoaded", () => {
   allowButton.addEventListener("click", requestNotificationPermission);
   dontAllowButton.addEventListener("click", hideNotificationPopup);
 
-  // Check permission status and show popup if needed
+  // Checks permission status and show popup if needed
   checkAndRequestPermission();
 
-  // Rest of your original code
   renderPosts(loadPostsFromLocalStorage());
   fetchLatestPostId();
 });
 
-// Fetch the latest post ID every 10 seconds
+// Fetchs the latest post ID every 'POLLING_TIME' seconds
 setInterval(fetchLatestPostId, POLLING_TIME);
