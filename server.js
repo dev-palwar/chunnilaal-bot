@@ -138,24 +138,20 @@ bot.on("channel_post", async (msg) => {
 
   // Updates the latest post ID
   latestPostId = postId;
+  channelUsername = msg.sender_chat.username;
 
   try {
     // Fetch channel details
     const chatInfo = await bot.getChat(chatId);
 
     broadcastNotification({
-      title: "New post in channel " + chatInfo.title,
+      title: "New post in channel" + chatInfo.title,
       body: text,
     });
 
-    // Extract channel name and username
-    const channelName = chatInfo.title;
-    channelUsername = chatInfo.username
-      ? `@${chatInfo.username}`
-      : "No username available";
-
+    // Extract channel name
+    channelName = chatInfo.title;
     console.log(`Channel Name: ${channelName}`);
-    console.log(`Channel Username: ${channelUsername}`);
 
     // Extract channel profile picture (if available)
     if (chatInfo.photo) {
@@ -164,6 +160,7 @@ bot.on("channel_post", async (msg) => {
 
       // Get the file URL using the file ID
       const fileLink = await bot.getFileLink(largestPhoto);
+      channelImageLink = fileLink;
       console.log(`Channel Profile Picture: ${fileLink}`);
     } else {
       console.log("Channel does not have a profile picture.");
@@ -216,8 +213,6 @@ app.post("/send-fcm-token", async (req, res) => {
 
 // Endpoint to get the latest post ID
 app.get("/latest-post-id", (req, res) => {
-  console.log(channelUsername);
-
   res.json({
     postId: latestPostId,
     channelImageLink,
