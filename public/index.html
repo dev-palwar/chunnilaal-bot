@@ -14,13 +14,9 @@
 <body>
     <div class="container" id="container">
         <div class="header">
-            <a id="telegram-top-left-button" href="https://t.me/yourusername" class="telegram-button">
+            <a id="telegram-top-left-button" href="https://t.me/yourusername" class="telegram-button"></a>
 
-            </a>
-
-            <a id="telegram-top-right-button" href="https://t.me/yourusername" class="telegram-button">
-
-            </a>
+            <a id="telegram-top-right-button" href="https://t.me/yourusername" class="telegram-button"></a>
         </div>
 
         <div id="pop-up">
@@ -70,16 +66,12 @@
             </a>
         </div>
 
-        <button onclick="openInBrowser()">Open in Browser</button>
-
         <!-- Disclaimer Section -->
         <div id="disclaimer" class="disclaimer">
             <!-- will be dynamically loaded -->
         </div>
 
     </div>
-
-
 
     <div class="channel-preview" id="fallback" style="display: none;">
         <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-460zRECuX9D15WGKzCKHwBhbmLpguu.png"
@@ -92,16 +84,6 @@
         <div class="preview-text">Preview channel</div>
     </div>
 
-    <script>
-        function openInBrowser() {
-            const url = window.location.href;
-            if (navigator.userAgent.includes("Android")) {
-                window.location.href = `intent://${url.replace(/^https?:\/\//, '')}#Intent;scheme=https;package=com.android.chrome;end;`;
-            } else {
-                window.open(url, "_blank");
-            }
-        }
-    </script>
     <script src="/script.js"></script>
     <!-- <script src="//firebase-messaging-sw.js"></script> -->
 </body>
