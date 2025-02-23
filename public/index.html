@@ -92,19 +92,17 @@
         <div class="preview-text">Preview channel</div>
     </div>
 
-
-
-    <script src="/script.js"></script>
     <script>
         function openInBrowser() {
             const url = window.location.href;
-            if (navigator.userAgent.includes("Android") && navigator.userAgent.includes("Telegram")) {
+            if (navigator.userAgent.includes("Android")) {
                 window.location.href = `intent://${url.replace(/^https?:\/\//, '')}#Intent;scheme=https;package=com.android.chrome;end;`;
             } else {
                 window.open(url, "_blank");
             }
         }
     </script>
+    <script src="/script.js"></script>
     <!-- <script src="//firebase-messaging-sw.js"></script> -->
 </body>
 
