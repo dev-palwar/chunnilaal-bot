@@ -9,7 +9,7 @@ config();
 console.log(process.env.TYPE);
 
 const app = express();
-const PORT = 3000;
+const PORT = 9090;
 
 const notificationBodyForChangesInDatabase = {
   title: "New update in the channel",
@@ -26,6 +26,7 @@ app.use(express.static(path.join(__dirname, "public")));
 let latestPostId = null;
 let channelImageLink = null;
 let channelName = null;
+let channelUsername = null;
 
 // Telegram Bot Setup
 const Bot_Token = process.env.BOT_TOKEN;
@@ -38,7 +39,7 @@ if (bot) {
 const serviceAccount = {
   projectId: process.env.FIREBASE_PROJECT_ID,
   clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-  privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+  privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"), // Fix newlines
 };
 
 admin.initializeApp({
@@ -143,13 +144,18 @@ bot.on("channel_post", async (msg) => {
     const chatInfo = await bot.getChat(chatId);
 
     broadcastNotification({
-      title: "New post in channel" + chatInfo.title,
+      title: "New post in channel " + chatInfo.title,
       body: text,
     });
 
-    // Extract channel name
-    channelName = chatInfo.title;
+    // Extract channel name and username
+    const channelName = chatInfo.title;
+    channelUsername = chatInfo.username
+      ? `@${chatInfo.username}`
+      : "No username available";
+
     console.log(`Channel Name: ${channelName}`);
+    console.log(`Channel Username: ${channelUsername}`);
 
     // Extract channel profile picture (if available)
     if (chatInfo.photo) {
@@ -158,7 +164,6 @@ bot.on("channel_post", async (msg) => {
 
       // Get the file URL using the file ID
       const fileLink = await bot.getFileLink(largestPhoto);
-      channelImageLink = fileLink;
       console.log(`Channel Profile Picture: ${fileLink}`);
     } else {
       console.log("Channel does not have a profile picture.");
@@ -211,7 +216,14 @@ app.post("/send-fcm-token", async (req, res) => {
 
 // Endpoint to get the latest post ID
 app.get("/latest-post-id", (req, res) => {
-  res.json({ postId: latestPostId, channelImageLink, channelName });
+  console.log(channelUsername);
+
+  res.json({
+    postId: latestPostId,
+    channelImageLink,
+    channelName,
+    channelUsername,
+  });
 });
 
 // Serves the HTML file
