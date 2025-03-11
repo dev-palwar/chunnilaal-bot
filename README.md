@@ -7,4 +7,4 @@ Instructions to run
   get the Botfather bot token
   make that bot admin in the channel that you want to fetch the posts from
 
--
+- don't try to use my keys-they've been deleted and are only here for the reference
